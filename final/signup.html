@@ -1,0 +1,801 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PaulTech | Secure Authentication</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <a href="signup.html" target="_blank"></a>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    /* Base Styles */
+    :root {
+      --primary: #00c9a7;
+      --primary-dark: #009c83;
+      --secondary: #2c5364;
+      --dark: #0f2027;
+      --light: #f8f9fa;
+      --gray: #6c757d;
+      --transition: all 0.3s ease;
+      --shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+      --border-radius: 12px;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      overflow: hidden;
+      position: relative;
+    }
+
+    /* Background Animation */
+    .background-animation {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+    }
+
+    .particle {
+      position: absolute;
+      background: rgba(0, 201, 167, 0.1);
+      border-radius: 50%;
+      animation: float 15s infinite linear;
+    }
+
+    .particle:nth-child(1) {
+      width: 200px;
+      height: 200px;
+      top: 20%;
+      left: 10%;
+      animation-delay: 0s;
+    }
+
+    .particle:nth-child(2) {
+      width: 150px;
+      height: 150px;
+      top: 60%;
+      left: 70%;
+      animation-delay: 2s;
+    }
+
+    .particle:nth-child(3) {
+      width: 100px;
+      height: 100px;
+      top: 30%;
+      left: 50%;
+      animation-delay: 4s;
+    }
+
+    .particle:nth-child(4) {
+      width: 250px;
+      height: 250px;
+      top: 70%;
+      left: 20%;
+      animation-delay: 6s;
+    }
+
+    .particle:nth-child(5) {
+      width: 180px;
+      height: 180px;
+      top: 10%;
+      left: 80%;
+      animation-delay: 8s;
+    }
+
+    @keyframes float {
+      0% {
+        transform: translateY(0) rotate(0deg);
+        opacity: 1;
+      }
+      50% {
+        transform: translateY(-100px) rotate(180deg);
+        opacity: 0.5;
+      }
+      100% {
+        transform: translateY(0) rotate(360deg);
+        opacity: 1;
+      }
+    }
+
+    /* Container */
+    .container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+      padding: 20px;
+      perspective: 1000px;
+    }
+
+    /* Form Styles */
+    .form {
+      background: rgba(255, 255, 255, 0.95);
+      padding: 40px;
+      border-radius: var(--border-radius);
+      width: 100%;
+      max-width: 420px;
+      box-shadow: var(--shadow);
+      transform-style: preserve-3d;
+      transition: var(--transition);
+      position: relative;
+      overflow: hidden;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .form::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: linear-gradient(
+        to bottom right,
+        rgba(0, 201, 167, 0.1),
+        rgba(44, 83, 100, 0.1)
+      );
+      transform: rotate(45deg);
+      z-index: -1;
+    }
+
+    .form-header {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .logo {
+      margin-bottom: 20px;
+      display: flex;
+      justify-content: center;
+    }
+
+    .logo img {
+      height: 50px;
+    }
+
+    .form h2 {
+      font-size: 24px;
+      font-weight: 600;
+      color: var(--dark);
+      margin-bottom: 10px;
+    }
+
+    .form p {
+      color: var(--gray);
+      font-size: 14px;
+    }
+
+    /* Input Groups */
+    .input-group {
+      position: relative;
+      margin-bottom: 20px;
+    }
+
+    .input-group i {
+      position: absolute;
+      top: 50%;
+      left: 15px;
+      transform: translateY(-50%);
+      color: var(--gray);
+      transition: var(--transition);
+    }
+
+    .input-group input {
+      width: 100%;
+      padding: 15px 15px 15px 45px;
+      border: 1px solid rgba(0, 0, 0, 0.1);
+      border-radius: var(--border-radius);
+      font-size: 14px;
+      transition: var(--transition);
+      background: rgba(255, 255, 255, 0.8);
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    }
+
+    .input-group input:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(0, 201, 167, 0.2);
+      outline: none;
+    }
+
+    .input-group input:focus + i {
+      color: var(--primary);
+    }
+
+    .toggle-password {
+      position: absolute;
+      top: 50%;
+      right: 15px;
+      transform: translateY(-50%);
+      color: var(--gray);
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .toggle-password:hover {
+      color: var(--primary);
+    }
+
+    /* Form Options */
+    .form-options {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 25px;
+      font-size: 14px;
+    }
+
+    .remember-me {
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+      color: var(--gray);
+    }
+
+    .remember-me input {
+      position: absolute;
+      opacity: 0;
+      cursor: pointer;
+    }
+
+    .checkmark {
+      position: relative;
+      height: 16px;
+      width: 16px;
+      background-color: #fff;
+      border: 1px solid #ccc;
+      border-radius: 3px;
+      margin-right: 8px;
+      transition: var(--transition);
+    }
+
+    .remember-me input:checked ~ .checkmark {
+      background-color: var(--primary);
+      border-color: var(--primary);
+    }
+
+    .checkmark:after {
+      content: "";
+      position: absolute;
+      display: none;
+      left: 5px;
+      top: 2px;
+      width: 4px;
+      height: 8px;
+      border: solid white;
+      border-width: 0 2px 2px 0;
+      transform: rotate(45deg);
+    }
+
+    .remember-me input:checked ~ .checkmark:after {
+      display: block;
+    }
+
+    .forgot-password {
+      color: var(--gray);
+      text-decoration: none;
+      transition: var(--transition);
+    }
+
+    .forgot-password:hover {
+      color: var(--primary);
+      text-decoration: underline;
+    }
+
+    /* Button Styles */
+    .btn-login {
+      width: 100%;
+      padding: 15px;
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      color: white;
+      border: none;
+      border-radius: var(--border-radius);
+      font-weight: 600;
+      cursor: pointer;
+      transition: var(--transition);
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 4px 15px rgba(0, 201, 167, 0.3);
+      margin-bottom: 20px;
+    }
+
+    .btn-login:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 7px 20px rgba(0, 201, 167, 0.4);
+    }
+
+    .btn-login:active {
+      transform: translateY(0);
+    }
+
+    .btn-text {
+      display: block;
+      transition: var(--transition);
+    }
+
+    .btn-loader {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      display: none;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .loader-dot {
+      width: 8px;
+      height: 8px;
+      background: white;
+      border-radius: 50%;
+      margin: 0 3px;
+      animation: bounce 1.5s infinite ease-in-out;
+    }
+
+    .loader-dot:nth-child(2) {
+      animation-delay: 0.2s;
+    }
+
+    .loader-dot:nth-child(3) {
+      animation-delay: 0.4s;
+    }
+
+    @keyframes bounce {
+      0%, 80%, 100% { 
+        transform: translateY(0);
+      }
+      40% {
+        transform: translateY(-10px);
+      }
+    }
+
+    /* Social Login */
+    .social-login {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .social-login p {
+      color: var(--gray);
+      font-size: 14px;
+      margin-bottom: 15px;
+      position: relative;
+    }
+
+    .social-login p::before,
+    .social-login p::after {
+      content: "";
+      position: absolute;
+      top: 50%;
+      width: 30%;
+      height: 1px;
+      background: rgba(0, 0, 0, 0.1);
+    }
+
+    .social-login p::before {
+      left: 0;
+    }
+
+    .social-login p::after {
+      right: 0;
+    }
+
+    .social-icons {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+    }
+
+    .social-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      color: white;
+      transition: var(--transition);
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+
+    .social-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .social-btn.google {
+      background: #DB4437;
+    }
+
+    .social-btn.facebook {
+      background: #4267B2;
+    }
+
+    .social-btn.linkedin {
+      background: #0077B5;
+    }
+
+    /* Form Footer */
+    .form-footer {
+      text-align: center;
+      font-size: 14px;
+      color: var(--gray);
+    }
+
+    .signup-link {
+      color: var(--primary);
+      text-decoration: none;
+      font-weight: 500;
+      transition: var(--transition);
+    }
+
+    .signup-link:hover {
+      text-decoration: underline;
+    }
+
+    /* Notification */
+    .notification {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      padding: 15px 25px;
+      background: var(--primary);
+      color: white;
+      border-radius: var(--border-radius);
+      box-shadow: var(--shadow);
+      transform: translateX(150%);
+      transition: transform 0.3s ease;
+      z-index: 1000;
+    }
+
+    .notification.show {
+      transform: translateX(0);
+    }
+
+    /* Toggle between forms */
+    .form-toggle {
+      display: none;
+    }
+
+    .toggle-container {
+      display: flex;
+      justify-content: center;
+      margin-top: 20px;
+    }
+
+    .toggle-btn {
+      background: rgba(255, 255, 255, 0.2);
+      border: none;
+      padding: 8px 15px;
+      border-radius: 20px;
+      color: white;
+      cursor: pointer;
+      font-weight: 500;
+      transition: var(--transition);
+    }
+
+    .toggle-btn:hover {
+      background: rgba(255, 255, 255, 0.3);
+    }
+
+    /* Responsive Design */
+    @media (max-width: 480px) {
+      .form {
+        padding: 30px 20px;
+      }
+      
+      .form h2 {
+        font-size: 20px;
+      }
+      
+      .input-group input {
+        padding: 12px 12px 12px 40px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="background-animation">
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+  </div>
+  
+  <div class="container">
+    <!-- Login Form -->
+    <div class="form login-form" id="loginForm">
+      <div class="form-header">
+        <div class="logo">
+          <img src="https://paultechsoftwareservices.com/upload/logo_519440_1596093291.png" alt="PaulTech Logo">
+        </div>
+        <h2>Welcome Back</h2>
+        <p>Sign in to access your account</p>
+      </div>
+      
+      <form id="loginFormElement">
+        <div class="input-group">
+          <i class="fas fa-user"></i>
+          <input type="text" id="loginUsername" placeholder="Username or Email" required>
+        </div>
+        
+        <div class="input-group">
+          <i class="fas fa-lock"></i>
+          <input type="password" id="loginPassword" placeholder="Password" required>
+          <i class="fas fa-eye toggle-password" id="toggleLoginPassword"></i>
+        </div>
+        
+        <div class="form-options">
+          <label class="remember-me">
+            <input type="checkbox" checked>
+            <span class="checkmark"></span>
+            Remember me
+          </label>
+          <a href="#" class="forgot-password">Forgot password?</a>
+        </div>
+        
+        <button type="submit" class="btn-login">
+          <span class="btn-text">Sign In</span>
+          <span class="btn-loader">
+            <div class="loader-dot"></div>
+            <div class="loader-dot"></div>
+            <div class="loader-dot"></div>
+          </span>
+        </button>
+        
+        <div class="social-login">
+          <p>Or sign in with</p>
+          <div class="social-icons">
+            <a href="#" class="social-btn google">
+              <i class="fab fa-google"></i>
+            </a>
+            <a href="#" class="social-btn facebook">
+              <i class="fab fa-facebook-f"></i>
+            </a>
+            <a href="#" class="social-btn linkedin">
+              <i class="fab fa-linkedin-in"></i>
+            </a>
+          </div>
+        </div>
+        
+        <div class="form-footer">
+          <p>Don't have an account? <a href="#" class="signup-link" id="showSignup">SIGN UP</a></p>
+        </div>
+      </form>
+    </div>
+    
+    <!-- Signup Form (Initially hidden) -->
+    <div class="form signup-form" id="signupForm" style="display: none;">
+      <div class="form-header">
+        <div class="logo">
+          <img src="https://paultechsoftwareservices.com/upload/logo_519440_1596093291.png" alt="PaulTech Logo">
+        </div>
+        <h2>Create Account</h2>
+        <p>Join our community today</p>
+      </div>
+      
+      <form id="signupFormElement">
+        <div class="input-group">
+          <i class="fas fa-user"></i>
+          <input type="text" id="signupName" placeholder="Full Name" required>
+        </div>
+        
+        <div class="input-group">
+          <i class="fas fa-envelope"></i>
+          <input type="email" id="signupEmail" placeholder="Email Address" required>
+        </div>
+        
+        <div class="input-group">
+          <i class="fas fa-lock"></i>
+          <input type="password" id="signupPassword" placeholder="Password" required>
+          <i class="fas fa-eye toggle-password" id="toggleSignupPassword"></i>
+        </div>
+        
+        <div class="input-group">
+          <i class="fas fa-lock"></i>
+          <input type="password" id="signupConfirmPassword" placeholder="Confirm Password" required>
+        </div>
+        
+        <div class="form-options">
+          <label class="remember-me">
+            <input type="checkbox" required>
+            <span class="checkmark"></span>
+            I agree to the <a href="#" style="color: var(--primary);">Terms & Conditions</a>
+          </label>
+        </div>
+        
+        <button type="submit" class="btn-login">
+          <span class="btn-text">Create Account</span>
+          <span class="btn-loader">
+            <div class="loader-dot"></div>
+            <div class="loader-dot"></div>
+            <div class="loader-dot"></div>
+          </span>
+        </button>
+        
+        <div class="social-login">
+          <p>Or sign up with</p>
+          <div class="social-icons">
+            <a href="#" class="social-btn google">
+              <i class="fab fa-google"></i>
+            </a>
+            <a href="#" class="social-btn facebook">
+              <i class="fab fa-facebook-f"></i>
+            </a>
+            <a href="#" class="social-btn linkedin">
+              <i class="fab fa-linkedin-in"></i>
+            </a>
+          </div>
+        </div>
+        
+        <div class="form-footer">
+          <p>Already have an account? <a href="#" class="signup-link" id="showLogin">SIGN IN</a></p>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="notification" id="notification"></div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // DOM Elements
+      const loginForm = document.getElementById('loginForm');
+      const signupForm = document.getElementById('signupForm');
+      const showSignupBtn = document.getElementById('showSignup');
+      const showLoginBtn = document.getElementById('showLogin');
+      const loginPasswordInput = document.getElementById('loginPassword');
+      const signupPasswordInput = document.getElementById('signupPassword');
+      const toggleLoginPassword = document.getElementById('toggleLoginPassword');
+      const toggleSignupPassword = document.getElementById('toggleSignupPassword');
+      const notification = document.getElementById('notification');
+      const loginBtn = document.querySelector('#loginFormElement .btn-login');
+      const signupBtn = document.querySelector('#signupFormElement .btn-login');
+      
+      // Toggle between login and signup forms
+      showSignupBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        loginForm.style.display = 'none';
+        signupForm.style.display = 'block';
+      });
+      
+      showLoginBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        signupForm.style.display = 'none';
+        loginForm.style.display = 'block';
+      });
+      
+      // Toggle password visibility for login
+      toggleLoginPassword.addEventListener('click', function() {
+        const type = loginPasswordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+        loginPasswordInput.setAttribute('type', type);
+        this.classList.toggle('fa-eye');
+        this.classList.toggle('fa-eye-slash');
+      });
+      
+      // Toggle password visibility for signup
+      toggleSignupPassword.addEventListener('click', function() {
+        const type = signupPasswordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+        signupPasswordInput.setAttribute('type', type);
+        this.classList.toggle('fa-eye');
+        this.classList.toggle('fa-eye-slash');
+      });
+      
+      // Show notification
+      function showNotification(message, isError = false) {
+        notification.textContent = message;
+        notification.style.background = isError ? '#e74c3c' : '#00c9a7';
+        notification.classList.add('show');
+        
+        setTimeout(() => {
+          notification.classList.remove('show');
+        }, 3000);
+      }
+      
+      // Login form submission
+      document.getElementById('loginFormElement').addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        const username = document.getElementById('loginUsername').value;
+        const password = document.getElementById('loginPassword').value;
+        
+        // Show loading state
+        loginBtn.querySelector('.btn-text').style.display = 'none';
+        loginBtn.querySelector('.btn-loader').style.display = 'flex';
+        loginBtn.disabled = true;
+        
+        // Simulate login process
+        setTimeout(() => {
+          // Hide loading state
+          loginBtn.querySelector('.btn-text').style.display = 'block';
+          loginBtn.querySelector('.btn-loader').style.display = 'none';
+          loginBtn.disabled = false;
+          
+          // Simple validation
+          if(username && password) {
+            if(username === 'admin' && password === 'password') {
+              showNotification('Login successful! Redirecting...');
+            } else {
+              showNotification('Invalid username or password', true);
+            }
+          } else {
+            showNotification('Please fill in all fields', true);
+          }
+        }, 1500);
+      });
+      
+      // Signup form submission
+      document.getElementById('signupFormElement').addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        const name = document.getElementById('signupName').value;
+        const email = document.getElementById('signupEmail').value;
+        const password = document.getElementById('signupPassword').value;
+        const confirmPassword = document.getElementById('signupConfirmPassword').value;
+        
+        // Show loading state
+        signupBtn.querySelector('.btn-text').style.display = 'none';
+        signupBtn.querySelector('.btn-loader').style.display = 'flex';
+        signupBtn.disabled = true;
+        
+        // Simulate signup process
+        setTimeout(() => {
+          // Hide loading state
+          signupBtn.querySelector('.btn-text').style.display = 'block';
+          signupBtn.querySelector('.btn-loader').style.display = 'none';
+          signupBtn.disabled = false;
+          
+          // Validation
+          if(!name || !email || !password || !confirmPassword) {
+            showNotification('Please fill in all fields', true);
+            return;
+          }
+          
+          if(password !== confirmPassword) {
+            showNotification('Passwords do not match', true);
+            return;
+          }
+          
+          if(!validateEmail(email)) {
+            showNotification('Please enter a valid email address', true);
+            return;
+          }
+          
+          showNotification('Account created successfully! Welcome to PaulTech');
+          
+          // Auto switch to login form after signup
+          setTimeout(() => {
+            signupForm.style.display = 'none';
+            loginForm.style.display = 'block';
+            // Auto-fill the login form
+            document.getElementById('loginUsername').value = email;
+            document.getElementById('loginPassword').value = password;
+          }, 2000);
+        }, 1500);
+      });
+      
+      // Email validation helper
+      function validateEmail(email) {
+        const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        return re.test(String(email).toLowerCase());
+      }
+    });
+  </script>
+</body>
+</html>
